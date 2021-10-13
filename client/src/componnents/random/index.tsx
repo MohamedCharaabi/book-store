@@ -4,9 +4,9 @@ function index() {
   return (
     <div className="flex justify-between  pt-6">
       <div className="w-1/2 flex flex-col justify-center items-start px-12">
-        <h1 className="text-black text-9xl">Guy Kawazaki</h1>
+        <h1 className="text-black text-6xl lg:text-9xl">Guy Kawazaki</h1>
 
-        <p className="text-black text-lg pt-9">
+        <p className="text-black  text-base lg:text-lg pt-9">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores,
           quisquam. Lorem ipsum dolor sit amet consectetur adipisicing elit.
           Quae tempora vitae quod, repellendus quo fuga veniam, reprehenderit
@@ -15,10 +15,10 @@ function index() {
         </p>
 
         <div className="flex p-8">
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-full">
+          <button className="bg-blue-500 text-white w-36 py-2 px-4 rounded-full">
             Buy now
           </button>
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-full ml-2">
+          <button className="bg-blue-500 text-white w-36 py-2 px-4 rounded-full ml-2">
             See Details
           </button>
         </div>
