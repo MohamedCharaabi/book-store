@@ -4,7 +4,7 @@ import Header from "../../componnents/header";
 const index: FC = () => {
   return (
     <div className="h-screen">
-      <Header />
+      <Header fixed={true} />
       <div className="flex  md:justify-center md:items-center px-7 h-full">
         <form className="w-full max-w-lg ">
           <div className="flex flex-wrap -mx-3 mb-6">

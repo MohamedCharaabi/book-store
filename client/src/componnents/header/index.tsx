@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
 
-interface Props {}
+interface Props {
+  fixed: boolean;
+}
 
-const Index: FC = (props: Props) => {
+const Index: FC<Props> = (props: Props) => {
   const [show, setShow] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -24,9 +26,8 @@ const Index: FC = (props: Props) => {
 
   return (
     <div
-      className={`h-16 w-full sticky top-0 z-50 bg-gray-900 ${
-        !show && "hidden"
-      }`}
+      className={`h-16 w-full sticky top-0 z-50 bg-gray-900 
+       ${props.fixed === false ? !show && "hidden" : "block"}`}
     >
       {/* <!-- Navbar goes here --> */}
       <nav className="bg-white shadow-lg">
