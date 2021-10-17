@@ -19,8 +19,8 @@ app.use(express.json());
 app.use(cors());
 
 // app.use(checkTable);
-app.use("/books", booksRoutes);
-app.use("/contacts", contactsRoutes);
+app.use("/api/books", booksRoutes);
+app.use("/api/contacts", contactsRoutes);
 
 conn.connect(function (err) {
   if (err) throw err;

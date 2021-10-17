@@ -1,67 +1,84 @@
-import React, { FC } from "react";
+import axios from "axios";
+import React, { FC, useEffect, useState } from "react";
 import Header from "../../componnents/header";
+import Modal from "../../componnents/modal";
 
 interface Props {}
 
-const people = [
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    department: "Optimization",
-    email: "jane.cooper@example.com",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-  },
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    department: "Optimization",
-    email: "jane.cooper@example.com",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-  },
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    department: "Optimization",
-    email: "jane.cooper@example.com",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-  },
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    department: "Optimization",
-    email: "jane.cooper@example.com",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-  },
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    department: "Optimization",
-    email: "jane.cooper@example.com",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-  },
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    department: "Optimization",
-    email: "jane.cooper@example.com",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60",
-  },
-  // More people...
-];
+enum Pagination {
+  HEAD = "head",
+  PREV = "prev",
+  STIll = "still",
+  NEXT = "next",
+  END = "end",
+}
 
-const index: FC = (props: Props) => {
+interface Book {
+  author: string;
+  id: number;
+  title: string;
+  category: string;
+}
+
+const BookManag: FC = (props: Props) => {
+  const [books, setBooks] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [page, setPage] = useState(0);
+  const [pagesLimits, setPagesLimits] = useState<Pagination>(Pagination.STIll);
+
+  const getBooks = async () => {
+    try {
+      const response = await axios.get<Book[]>(
+        `http://localhost:5000/api/books/bb?offset=${page}`
+      );
+      response.data.length > 0 && setBooks(response.data);
+      response.data.length === 0 && setPagesLimits(Pagination.END);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getBooks();
+  }, [page]);
+
+  //handle modal
+  const handleOpenModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log(openModal);
+    setOpenModal(!openModal);
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/books/${id}`);
+      setBooks(books.filter((book) => book.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div>
+    <div className=" overflow-hidden">
       <Header fixed={true} />
 
-      <div>
-        <div className="flex flex-col">
+      <div className="mt-7 relative">
+        <div className="flex justify-end w-full px-7 ">
+          <button
+            className="border-blue-600 border-2 py-2 px-4 rounded text-blue-500 "
+            onClick={handleOpenModal}
+          >
+            Add Book
+          </button>
+        </div>
+        {/* table */}
+        <div className="flex  mt-3 flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -95,33 +112,36 @@ const index: FC = (props: Props) => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {people.map((person) => (
-                      <tr key={person.email}>
+                    {books.map((book) => (
+                      <tr key={book.title}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
                             <div className="flex-shrink-0 h-10 w-10">
                               <img
                                 className="h-10 w-10 rounded-full"
-                                src={person.image}
+                                src={book.author}
                                 alt=""
                               />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium text-gray-900">
-                                {person.name}
+                              <div
+                                className="text-sm font-medium text-gray-900"
+                                onClick={handleOpenModal}
+                              >
+                                {book.title}
                               </div>
                               <div className="text-sm text-gray-500">
-                                {person.email}
+                                {book.category}
                               </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            {person.title}
+                            {book.title}
                           </div>
                           <div className="text-sm text-gray-500">
-                            {person.department}
+                            {book.title}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -140,17 +160,21 @@ const index: FC = (props: Props) => {
                               stroke="currentColor"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                               />
                             </svg>
                           </a>
 
                           <a
-                            href="#"
+                            // href="#"
                             className="text-indigo-600 hover:text-indigo-900"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDelete(book.id);
+                            }}
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -160,9 +184,9 @@ const index: FC = (props: Props) => {
                               stroke="currentColor"
                             >
                               <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                               />
                             </svg>
@@ -180,40 +204,64 @@ const index: FC = (props: Props) => {
         {/* pagination */}
         <div className="flex justify-center items-center mt-2 space-x-1">
           <a
-            href="#"
-            className="flex items-center px-4 py-2 text-gray-500 bg-gray-300 rounded-md"
+            onClick={() => {
+              page > 1 && setPage(page - 1);
+            }}
+            className="flex items-center px-4 py-2 text-gray-500 bg-gray-300 hover:bg-blue-400 rounded-md hover:text-white"
           >
             Previous
           </a>
 
           <a
-            href="#"
-            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-blue-400 hover:text-white"
+            onClick={() => {
+              setPage(1);
+            }}
+            className={` ${
+              page === 1 ? "bg-yellow-500" : "bg-gray-200"
+            } px-4 py-2 text-gray-700  rounded-md hover:bg-blue-400 hover:text-white`}
           >
             1
           </a>
           <a
-            href="#"
-            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-blue-400 hover:text-white"
+            onClick={() => {
+              setPage(2);
+            }}
+            className={` ${
+              page === 2 ? "bg-yellow-500" : "bg-gray-200"
+            } px-4 py-2 text-gray-700  rounded-md hover:bg-blue-400 hover:text-white`}
           >
             2
           </a>
           <a
-            href="#"
-            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-blue-400 hover:text-white"
+            onClick={() => {
+              setPage(3);
+            }}
+            className={` ${
+              page === 3 ? "bg-yellow-500" : "bg-gray-200"
+            } px-4 py-2 text-gray-700  rounded-md hover:bg-blue-400 hover:text-white`}
           >
             3
           </a>
           <a
-            href="#"
+            onClick={() => {
+              pagesLimits === Pagination.STIll && setPage(page + 1);
+            }}
             className="px-4 py-2 font-bold text-gray-500 bg-gray-300 rounded-md hover:bg-blue-400 hover:text-white"
           >
             Next
           </a>
         </div>
       </div>
+      {/* add book modal */}
+      <div
+        className={` ${
+          openModal && "absolute"
+        } top-12  bottom-0 right-0  grid place-items-center  bg-gray-700 overflow-scroll scrollbar-hidden`}
+      >
+        {openModal && <Modal setOpen={setOpenModal} openState={openModal} />}
+      </div>
     </div>
   );
 };
 
-export default index;
+export default BookManag;

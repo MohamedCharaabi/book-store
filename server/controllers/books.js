@@ -25,6 +25,21 @@ export const getBooks = async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
+export const getBooksWithLimits = async (req, res) => {
+  const { page } = req.query;
+  const start = parseInt(page) * 5;
+  console.log(start);
+  await con
+    .select("*")
+    .from("books")
+    .limit(5)
+    .offset(start)
+    .then((books) => {
+      res.json(books);
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+};
+
 export const getBook = async (req, res) => {
   const { id } = req.params;
   await con
