@@ -1,9 +1,16 @@
-import React, { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import Header from "../../componnents/header";
 import Random from "../../componnents/random";
+import Slider from "../../componnents/slider";
 
 interface Props {}
 
+export type SliderData = {
+  txt1: string;
+  txt2: string;
+  txt3: string;
+  image: string;
+};
 interface Genre {
   title: string;
   image: string;
@@ -80,18 +87,49 @@ let genres: Genre[] | any = [
   },
 ];
 
-const index: FC = (props: Props) => {
+let slider: SliderData[] = [
+  {
+    txt1: "Huge Library",
+    txt2: "Listen or Read",
+    txt3: "All Free",
+    image:
+      "https://skybook-16ed9.kxcdn.com/demo-01/wp-content/uploads/2018/12/slider2.jpg",
+  },
+  {
+    txt1: "Huge Content",
+    txt2: "keep track",
+    txt3: "listen every where",
+    image:
+      "https://skybook-16ed9.kxcdn.com/demo-01/wp-content/uploads/2018/12/slider1.jpg",
+  },
+];
+
+const Home: FC = (props: Props) => {
+  const [sliderItem, setSliderItem] = useState(1);
+
+  useEffect(() => {
+    setInterval(() => {
+      setSliderItem((sliderItem) => (sliderItem === 1 ? 0 : 1));
+    }, 5000);
+  }, []);
+
+  // console.log(slider[sliderItem]);
+
   return (
     <div>
       <Header fixed={false} />
-      <Random />
+      {/* <Random /> */}
+
+      {/* Slider */}
+
+      <Slider selectedSlider={slider[sliderItem]} />
       {/* genres */}
       <h1 className="text-black text-4xl px-10">Genres</h1>
       <div className="flex overflow-x-scroll overflow-y-hidden w-full gap-2 px-12 scrollbar-hidden">
         {genres.map((genre: Genre, index: number) => {
           return (
             <div
-              className="h-52 min-w-max object-contain relative 
+              className="h-52 min-w-max object-contain relative py-2
             transition delay-150 duration-300 ease-in-out transform hover:-translate-y-3 hover:scale-110 "
             >
               <img
@@ -189,4 +227,4 @@ const index: FC = (props: Props) => {
   );
 };
 
-export default index;
+export default Home;

@@ -27,3 +27,9 @@ code {
   -ms-overflow-style: none;
   scrollbar-width: none; /* Firefox */
 }
+
+@font-face {
+  font-family: "Fell";
+  src: local("Fell"),
+    url(./assets/fonts/IMFellEnglishSC-Regular.ttf) format("truetype");
+}

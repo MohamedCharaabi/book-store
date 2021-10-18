@@ -30,10 +30,12 @@ const BookManag: FC = (props: Props) => {
   const getBooks = async () => {
     try {
       const response = await axios.get<Book[]>(
-        `http://localhost:5000/api/books/bb?offset=${page}`
+        `http://localhost:5000/api/books/bb?page=${page}`
       );
       response.data.length > 0 && setBooks(response.data);
-      response.data.length === 0 && setPagesLimits(Pagination.END);
+      response.data.length < 5
+        ? setPagesLimits(Pagination.END)
+        : setPagesLimits(Pagination.STIll);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -61,7 +63,13 @@ const BookManag: FC = (props: Props) => {
     }
   };
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen">
+        <div className=" grid place-content-center">
+          <div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-purple-500"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -205,7 +213,7 @@ const BookManag: FC = (props: Props) => {
         <div className="flex justify-center items-center mt-2 space-x-1">
           <a
             onClick={() => {
-              page > 1 && setPage(page - 1);
+              page > 0 && setPage(page - 1);
             }}
             className="flex items-center px-4 py-2 text-gray-500 bg-gray-300 hover:bg-blue-400 rounded-md hover:text-white"
           >
@@ -214,13 +222,23 @@ const BookManag: FC = (props: Props) => {
 
           <a
             onClick={() => {
+              setPage(0);
+            }}
+            className={` ${
+              page === 0 ? "bg-yellow-500" : "bg-gray-200"
+            } px-4 py-2 text-gray-700  rounded-md hover:bg-blue-400 hover:text-white`}
+          >
+            1
+          </a>
+          <a
+            onClick={() => {
               setPage(1);
             }}
             className={` ${
               page === 1 ? "bg-yellow-500" : "bg-gray-200"
             } px-4 py-2 text-gray-700  rounded-md hover:bg-blue-400 hover:text-white`}
           >
-            1
+            2
           </a>
           <a
             onClick={() => {
@@ -228,16 +246,6 @@ const BookManag: FC = (props: Props) => {
             }}
             className={` ${
               page === 2 ? "bg-yellow-500" : "bg-gray-200"
-            } px-4 py-2 text-gray-700  rounded-md hover:bg-blue-400 hover:text-white`}
-          >
-            2
-          </a>
-          <a
-            onClick={() => {
-              setPage(3);
-            }}
-            className={` ${
-              page === 3 ? "bg-yellow-500" : "bg-gray-200"
             } px-4 py-2 text-gray-700  rounded-md hover:bg-blue-400 hover:text-white`}
           >
             3
