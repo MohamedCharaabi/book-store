@@ -33,3 +33,31 @@ code {
   src: local("Fell"),
     url(./assets/fonts/IMFellEnglishSC-Regular.ttf) format("truetype");
 }
+
+@font-face {
+  font-family: "Rufina";
+  src: local("Rufina"),
+    url(./assets/fonts/Rufina-Regular.ttf) format("truetype");
+}
+
+.card {
+  position: relative;
+  border-radius: 20px;
+  /* width: 350px;
+  height: 400px; */
+  background-size: contain;
+  background-position: center;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #363ea0, #3278d8, #59bfd7);
+  filter: blur(10px);
+  border-radius: 20px;
+  z-index: -1;
+  transform: rotate(15deg);
+}

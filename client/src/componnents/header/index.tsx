@@ -27,11 +27,7 @@ const Index: FC<Props> = (props: Props) => {
   return (
     <div
       className={`h-16 w-full sticky top-0 z-50 bg-gray-900 
-       ${
-         props.fixed === false
-           ? !show && "hidden"
-           : "block animate-fade-in-up-1-5"
-       }`}
+       ${props.fixed === false ? !show && "hidden" : "block "}`}
     >
       {/* <!-- Navbar goes here --> */}
       <nav className="bg-white shadow-lg">

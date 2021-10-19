@@ -5,12 +5,12 @@ import Slider from "../../componnents/slider";
 
 interface Props {}
 
-export type SliderData = {
+export interface SliderData {
   txt1: string;
   txt2: string;
   txt3: string;
   image: string;
-};
+}
 interface Genre {
   title: string;
   image: string;
@@ -120,16 +120,14 @@ const Home: FC = (props: Props) => {
       <Header fixed={false} />
       {/* <Random /> */}
 
-      {/* Slider */}
-
-      <Slider selectedSlider={slider[sliderItem]} />
+      <Slider {...slider[sliderItem]} />
       {/* genres */}
       <h1 className="text-black text-4xl px-10">Genres</h1>
       <div className="flex overflow-x-scroll overflow-y-hidden w-full gap-2 px-12 scrollbar-hidden">
         {genres.map((genre: Genre, index: number) => {
           return (
             <div
-              className="h-52 min-w-max object-contain relative py-2
+              className="h-52 min-w-max object-contain relative py-2 card
             transition delay-150 duration-300 ease-in-out transform hover:-translate-y-3 hover:scale-110 "
             >
               <img

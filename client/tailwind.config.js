@@ -1,9 +1,12 @@
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
       fell: ["Fell", "sans-serif"],
+      rufina: ["Rufina", "sans-serif"],
     },
     extend: {
       transitionProperty: {
@@ -43,7 +46,7 @@ module.exports = {
         "fade-in-up": {
           from: {
             opacity: "0",
-            transform: "translateY(50px)",
+            transform: "translateY(100px)",
           },
           to: {
             opacity: "1",
@@ -65,10 +68,10 @@ module.exports = {
         "fade-in-down": "fade-in-down 0.5s ease-out",
         "fade-out-down": "fade-out-down 0.5s ease-out",
         "fade-in-up": "fade-in-up 1.5s ease-out",
-        "fade-in-up-1-5": "fade-in-up 1.5s ease-out",
-        "fade-in-up-2": "fade-in-up 2s ease-out",
-        "fade-in-up-2-5": "fade-in-up 2.5s ease-out",
-        "fade-in-up-image": "scale-in-up 5s ease-in",
+        "fade-in-up-1-5": "fade-in-up 5s ease-out infinite",
+        "fade-in-up-2": "fade-in-up 5s ease-out infinite",
+        "fade-in-up-2-5": "fade-in-up 5s ease-out  infinite ",
+        "fade-in-up-image": "scale-in-up 5s ease-in infinite",
         "fade-out-up": "fade-out-up 0.5s ease-out",
       },
     },
