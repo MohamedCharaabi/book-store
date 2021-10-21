@@ -1,19 +1,8 @@
 "use strict";
 
 import express from "express";
-import knex from "knex";
+import { con } from "../config/database.js";
 const router = express.Router();
-
-const con = knex({
-  client: "mysql",
-  connection: {
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "46284628",
-    database: "book_db",
-  },
-});
 
 export const getContacts = async (req, res) => {
   await con
@@ -33,6 +22,21 @@ export const getContact = async (req, res) => {
     .where("id", id)
     .then((contact) => {
       res.json(contact);
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+};
+
+export const getReclamsWithLimits = async (req, res) => {
+  const { page } = req.query;
+  const start = parseInt(page) * 5;
+  console.log(start);
+  await con
+    .select("*")
+    .from("contacts")
+    .limit(5)
+    .offset(start)
+    .then((cts) => {
+      res.json(cts);
     })
     .catch((err) => res.status(400).json("Error: " + err));
 };

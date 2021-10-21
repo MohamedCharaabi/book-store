@@ -61,3 +61,21 @@ code {
   z-index: -1;
   transform: rotate(15deg);
 }
+
+.tab::after {
+  content: "";
+  width: 100%;
+  height: 2px;
+  display: block;
+  background-color: #f07c29;
+  -webkit-transform: scaleX(0);
+  -moz-transform: scaleX(0);
+  -ms-transform: scaleX(0);
+  -o-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: transform 0.3s;
+  -moz-transition: transform 0.3s;
+  -o-transition: transform 0.3s;
+  transition: transform 0.3s;
+  transform-origin: 50%;
+}

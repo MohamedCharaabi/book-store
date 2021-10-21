@@ -1,19 +1,8 @@
 "use strict";
 
 import express from "express";
-import knex from "knex";
 const router = express.Router();
-
-const con = knex({
-  client: "mysql",
-  connection: {
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "46284628",
-    database: "book_db",
-  },
-});
+import { con } from "../config/database.js";
 
 export const getBooks = async (req, res) => {
   await con

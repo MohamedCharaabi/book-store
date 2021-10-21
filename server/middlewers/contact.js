@@ -1,15 +1,4 @@
-import knex from "knex";
-
-const con = knex({
-  client: "mysql",
-  connection: {
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "46284628",
-    database: "book_db",
-  },
-});
+import { con } from "../config/database.js";
 
 export const checkContactsTable = async (req, res, next) => {
   // check if table exists

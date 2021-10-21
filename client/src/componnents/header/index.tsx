@@ -47,25 +47,25 @@ const Index: FC<Props> = (props: Props) => {
               <div className="hidden md:flex items-center space-x-1">
                 <a
                   href="/home"
-                  className="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold "
+                  className="py-4 px-2 text-blue-500 border-b-4 border-blue-500 font-semibold "
                 >
                   Home
                 </a>
                 <a
                   href=""
-                  className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300"
+                  className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
                 >
                   Services
                 </a>
                 <a
                   href=""
-                  className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300"
+                  className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
                 >
                   About
                 </a>
                 <a
                   href="/reclam"
-                  className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300"
+                  className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
                 >
                   Contact Us
                 </a>
@@ -76,7 +76,7 @@ const Index: FC<Props> = (props: Props) => {
               <div className="relative">
                 <input
                   type="text"
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-green-500"
+                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
                   placeholder="Search"
                 />
                 <div className="absolute top-0 flex items-center h-full">
@@ -114,13 +114,13 @@ const Index: FC<Props> = (props: Props) => {
             <div className="hidden md:flex items-center space-x-3 ">
               <a
                 href=""
-                className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300"
+                className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300"
               >
                 Log In
               </a>
               <a
                 href=""
-                className="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300"
+                className="py-2 px-2 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
               >
                 Sign Up
               </a>
@@ -132,7 +132,7 @@ const Index: FC<Props> = (props: Props) => {
                 onClick={handleToggleMenu}
               >
                 <svg
-                  className=" w-6 h-6 text-gray-500 hover:text-green-500 "
+                  className=" w-6 h-6 text-gray-500 hover:text-blue-500 "
                   x-show="!showMenu"
                   fill="none"
                   stroke-linecap="round"
@@ -153,7 +153,7 @@ const Index: FC<Props> = (props: Props) => {
             <li className="active">
               <a
                 href="index.html"
-                className="block text-sm px-2 py-4 text-white bg-green-500 font-semibold"
+                className="block text-sm px-2 py-4 text-white bg-blue-500 font-semibold"
               >
                 Home
               </a>
@@ -161,7 +161,7 @@ const Index: FC<Props> = (props: Props) => {
             <li>
               <a
                 href="#services"
-                className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300"
+                className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
               >
                 Services
               </a>
@@ -169,7 +169,7 @@ const Index: FC<Props> = (props: Props) => {
             <li>
               <a
                 href="#about"
-                className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300"
+                className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
               >
                 About
               </a>
@@ -177,7 +177,7 @@ const Index: FC<Props> = (props: Props) => {
             <li>
               <a
                 href="#contact"
-                className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300"
+                className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
               >
                 Contact Us
               </a>
