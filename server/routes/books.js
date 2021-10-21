@@ -18,6 +18,6 @@ router.get("/:id", checkBooksTable, getBook);
 router.post("/", checkBooksTable, addBook);
 router.patch("/:id", checkBooksTable, updateBook);
 router.delete("/:id", checkBooksTable, deleteBook);
-router.get("/search/:search", checkBooksTable, searchBook);
+router.get("/search/:term", checkBooksTable, searchBook);
 
 export default router;

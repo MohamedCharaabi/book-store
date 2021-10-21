@@ -1,4 +1,7 @@
+import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Book } from "../../types";
 
 interface Props {
   fixed: boolean;
@@ -7,6 +10,7 @@ interface Props {
 const Index: FC<Props> = (props: Props) => {
   const [show, setShow] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [bookSeggestions, setBookSeggestions] = useState<Book[]>([]);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -24,6 +28,49 @@ const Index: FC<Props> = (props: Props) => {
     setShowMenu(!showMenu);
   }
 
+  const searchOnChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    let value = e.target.value;
+    console.log(value);
+    if (value.length > 0) {
+      await axios
+        .get<Book[]>(`http://localhost:5000/api/books/search/${value}`)
+        .then((res) => {
+          console.log(res.data);
+          setBookSeggestions(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setBookSeggestions([]);
+    }
+  };
+
+  const renderSuggestions = () => {
+    console.log(bookSeggestions);
+
+    if (bookSeggestions.length === 0) {
+      return null;
+    }
+    console.log(bookSeggestions);
+    return (
+      <u>
+        {bookSeggestions.slice(0, 5).map((book: Book) => {
+          return (
+            <li key={book.id} className="flex mt-5 px-2 py-1 hover:bg-blue-200">
+              <img alt="author" className=" w-14 h-14" src={book.cover_url} />
+              <div className="flex-col flex ml-2">
+                <span>{book.title}</span>
+                <span>{book.author}</span>
+              </div>
+            </li>
+          );
+        })}
+      </u>
+    );
+  };
+
   return (
     <div
       className={`h-16 w-full sticky top-0 z-50 bg-gray-900 
@@ -34,93 +81,93 @@ const Index: FC<Props> = (props: Props) => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex justify-between">
             <div className="flex space-x-7">
-              <div>
-                {/* <!-- Website Logo --> */}
-                <a href="#" className="flex items-center py-4 px-2">
-                  <img src="logo.png" alt="Logo" className="h-8 w-8 mr-2" />
-                  <span className="font-semibold text-gray-500 text-lg">
-                    Navigation
+              {/* <!-- Website Logo --> */}
+              <Link to="/home">
+                <a className="flex items-center py-4 px-2">
+                  <img
+                    src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/c039b824474525.56334ce736de9.jpg"
+                    alt="Logo"
+                    className="h-9 w-9 mr-2"
+                  />
+                  <span className="font-semibold text-gray-500 text-base lg:text-lg">
+                    Book Store
                   </span>
                 </a>
-              </div>
+              </Link>
+
               {/* <!-- Primary Navbar items --> */}
               <div className="hidden md:flex items-center space-x-1">
                 <a
                   href="/home"
-                  className="py-4 px-2 text-blue-500 border-b-4 border-blue-500 font-semibold "
+                  className="py-4 px-2 text-blue-500 border-b-4 text-sm lg:text-base border-blue-500 font-semibold "
                 >
                   Home
                 </a>
-                <a
-                  href=""
-                  className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
-                >
-                  Services
-                </a>
-                <a
-                  href=""
-                  className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
-                >
-                  About
-                </a>
-                <a
-                  href="/reclam"
-                  className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
-                >
-                  Contact Us
-                </a>
+                <Link to="/home">
+                  <a
+                    // href="/home"
+                    className="py-4 px-2 text-gray-500 font-semibold text-sm lg:text-base hover:text-blue-500 transition duration-300"
+                  >
+                    Services
+                  </a>
+                </Link>
+                <Link to="/home">
+                  <a className="py-4 px-2 text-gray-500 font-semibold text-sm lg:text-base hover:text-blue-500 transition duration-300">
+                    About
+                  </a>
+                </Link>
+                <Link to="/reclam">
+                  <a
+                    // href="/reclam"
+                    className="py-4 px-2 text-gray-500 font-semibold text-sm lg:text-base hover:text-blue-500 transition duration-300"
+                  >
+                    Contact
+                  </a>
+                </Link>
               </div>
             </div>
             {/* search */}
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <input
-                  type="text"
-                  className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                  placeholder="Search"
-                />
-                <div className="absolute top-0 flex items-center h-full">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+            <div className="flex flex-col justify-center ">
+              <div className="flex items-center space-x-2">
+                <div className="relative">
+                  <input
+                    type="text"
+                    className="bg-gray-200  appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                    placeholder="Search"
+                    onChange={searchOnChange}
+                  />
+                  <div className="absolute  top-0 flex items-center h-full">
+                    <svg
+                      className="h-5 w-5 text-gray-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  {/* search results*/}
+                  <div className="absolute bg-white w-full">
+                    {renderSuggestions()}
+                  </div>
                 </div>
               </div>
-              {/* <div className="relative">
-                <div className="absolute top-0 flex items-center h-full">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </div> */}
             </div>
 
             {/* <!-- Secondary Navbar items --> */}
             <div className="hidden md:flex items-center space-x-3 ">
               <a
                 href=""
-                className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300"
+                className="py-2 px-1 lg:px-2  text-sm lg:text-base font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300"
               >
                 Log In
               </a>
               <a
                 href=""
-                className="py-2 px-2 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
+                className="py-2 px-1 lg:px-2  text-sm lg:text-base font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
               >
                 Sign Up
               </a>
@@ -148,7 +195,7 @@ const Index: FC<Props> = (props: Props) => {
           </div>
         </div>
         {/* mobile menu */}
-        <div className={`${!showMenu && "hidden"} mobile-menu`}>
+        <div className={`${!showMenu && "hidden"} lg:hidden mobile-menu`}>
           <ul className="">
             <li className="active">
               <a
@@ -174,6 +221,7 @@ const Index: FC<Props> = (props: Props) => {
                 About
               </a>
             </li>
+
             <li>
               <a
                 href="#contact"

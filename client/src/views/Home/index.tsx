@@ -1,7 +1,9 @@
 import { FC, useEffect, useState } from "react";
+import { getBooks } from "../../api/books";
 import Header from "../../componnents/header";
 import Random from "../../componnents/random";
 import Slider from "../../componnents/slider";
+import { Book, Genre, genresData } from "../../types";
 
 interface Props {}
 
@@ -11,81 +13,8 @@ export interface SliderData {
   txt3: string;
   image: string;
 }
-interface Genre {
-  title: string;
-  image: string;
-}
 
-let genres: Genre[] | any = [
-  {
-    title: "Drama",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8BtsyurB1qIGB5o6_Ng-uHJXiEZGjw7RZ026hb8Xi5ym0H5e9RQi84bbOGQIxmcKzm7c&usqp=CAU",
-  },
-
-  {
-    title: "Comedy",
-    image:
-      "https://img.utdstc.com/icon/270/8c5/2708c5fe1f2ae7e7eb301ab47d63536159fb29a8394fcc1e388389527eda1925:200",
-  },
-  {
-    title: "Biography",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgRTPnMAD3XhIkYwOgSlm08EuR5sYyEvf6Eg&usqp=CAU",
-  },
-  {
-    title: "Science",
-    image: "https://media.lactualite.com/2021/09/mr_conscience-1200x675.jpg",
-  },
-  {
-    title: "Family",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgAaMjGBFq6cdhPHxb9fEeJlRPYBNTUdsj7yRC0_l_ICjmCxVNTyFiIBKdsWRvOFvCnzk&usqp=CAU",
-  },
-  {
-    title: "History",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUFKlgV4kAIBPc7bucJnJIjo4hv6vkCRY9eGg3926-v5UsXaGphaVFxPIAAOz-cT_yOik&usqp=CAU",
-  },
-  {
-    title: "Religion",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpdI76LnyvLxLY22Y13VQh3mCzn_dJPcD8oqJ4g2lrHa0jeTPqEVYkIKIFLBwe2BVLhGI&usqp=CAU",
-  },
-  {
-    title: "Fantasy",
-    image:
-      "https://i.pinimg.com/originals/d4/07/a4/d407a47517be7b63aa90bed34ef76c18.jpg",
-  },
-  {
-    title: "Romance",
-    image:
-      "https://blog.mangolanguages.com/hs-fs/hubfs/mango-valentines-day.png?width=795&name=mango-valentines-day.png",
-  },
-  {
-    title: "Thriller",
-    image:
-      "https://media.istockphoto.com/photos/shhh-picture-id526854349?k=20&m=526854349&s=612x612&w=0&h=ynxPGkrUWDbYg53Wiw-RQotlwmt_NtEtT0Cz_tfi43s=",
-  },
-
-  {
-    title: "Mystery",
-    image:
-      "https://theattractiongame.com/wp-content/uploads/2020/01/how-to-be-more-mysterious-1.jpg",
-  },
-
-  {
-    title: "Crime",
-    image:
-      "https://bigdata-madesimple.com/wp-content/uploads/2017/09/Crime.jpg",
-  },
-
-  {
-    title: "Adventure",
-    image:
-      "https://i0.wp.com/www.99inspiration.com/wp-content/uploads/2016/07/Brilliant-Adventure-Photography-by-Isaac-Gautschi.jpg?fit=800%2C800&ssl=1",
-  },
-];
+let genres = genresData;
 
 let slider: SliderData[] = [
   {
@@ -106,14 +35,30 @@ let slider: SliderData[] = [
 
 const Home: FC = (props: Props) => {
   const [sliderItem, setSliderItem] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [popularBooks, setPopularBooks] = useState<Book[]>([]);
 
   useEffect(() => {
+    getBooks().then((res) => {
+      console.log("res", res);
+      setPopularBooks(res);
+      setIsLoading(false);
+    });
+
     setInterval(() => {
       setSliderItem((sliderItem) => (sliderItem === 1 ? 0 : 1));
     }, 5000);
   }, []);
 
   // console.log(slider[sliderItem]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen w-screen grid place-content-center">
+        <div className=" animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -150,25 +95,23 @@ const Home: FC = (props: Props) => {
         <h2 className="text-blue-600">See All</h2>
       </div>
       <div className="flex overflow-x-scroll overflow-y-hidden  w-full gap-2 px-12 mt-2 scrollbar-hidden">
-        {genres.map((genre: Genre) => {
+        {popularBooks.slice(0, 8).map((book: Book) => {
           return (
             <div className="min-h-max w-40 flex-none  ">
               <img
-                src="https://www.imagebee.org/misc/book-cover/book-cover-1-1725x2625.jpg"
-                alt={genre.title}
+                src={book.cover_url}
+                alt={book.title}
                 className="w-36 h-48"
               />
-              <h3 className="  top-1/2 left-0  text-black ">
-                ipsum dolor sit amet consectetur adipisicing
-              </h3>
+              <h3 className="  top-1/2 left-0  text-black ">{book.title}</h3>
               <h3 className="  top-1/2 left-0 w-full text-gray-500 ">
-                {genre.title}
+                {book.author}
               </h3>
               <h3 className="  top-1/2 left-0 w-full text-yellow-300 ">
                 ✻✻✻✻✻
               </h3>
               <button className=" border-blue-600 border-2 rounded-lg p-2 text-blue-500">
-                $22.95
+                {book.price ?? "$22.95"}
               </button>
             </div>
           );

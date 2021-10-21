@@ -80,11 +80,11 @@ export const deleteBook = async (req, res) => {
 };
 
 export const searchBook = async (req, res) => {
-  const { search } = req.params;
+  const { term } = req.params;
   await con
     .select("*")
     .from("books")
-    .where("title", "like", `%${search}%`)
+    .where("title", "like", `%${term}%`)
     .then((book) => {
       res.json(book);
     })

@@ -19,14 +19,14 @@ const Slider: FC<SliderData> = (selectedSlider: SliderData) => {
             alt=""
           />
         </div>
-        <div className="absolute top-20 left-14  animate-fade-in-up-2-5">
-          <h1 className="text-6xl  text-white font-fell uppercase">
+        <div className="absolute top-2 left-5 sm:top-10 sm:left-14  animate-fade-in-up-image md:animate-fade-in-up-2-5">
+          <h1 className="  text-xs xs:text-base sm:text-xl md:text-2xl  lg:text-6xl  text-white font-fell uppercase">
             {selectedSlider.txt1}
           </h1>
-          <h1 className="text-6xl  font-fell uppercase">
+          <h1 className="text-xs xs:text-base sm:text-xl md:text-2xl  lg:text-6xl  font-fell uppercase">
             {selectedSlider.txt2}
           </h1>
-          <h1 className="text-7xl mt-2  text-yellow-600 font-fell uppercase">
+          <h1 className="text-xs xs:text-base sm:text-xl md:text-2xl  lg:text-7xl mt-2  text-yellow-600 font-fell uppercase">
             {selectedSlider.txt3}
           </h1>
         </div>

@@ -8,6 +8,7 @@ import React, {
   useState,
 } from "react";
 import { X } from "react-feather";
+import { Genre, genresData } from "../../types";
 interface Props {
   openState: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -117,9 +118,9 @@ const Index: FC<Props> = (props: Props) => {
                   setFormData({ ...formData, title: e.target.value })
                 }
               />
-              <p className="text-red-500 text-xs italic">
+              {/* <p className="text-red-500 text-xs italic">
                 Please fill out this field.
-              </p>
+              </p> */}
             </div>
             <div className="w-full md:w-1/2 px-3">
               <label
@@ -135,8 +136,14 @@ const Index: FC<Props> = (props: Props) => {
                   setFormData({ ...formData, genre: e.target.value })
                 }
               >
-                <option value="c1">Choose...</option>
-                <option value="c2">...</option>
+                <option value="" disabled>
+                  Choose...
+                </option>
+                {genresData.map((genre: Genre) => (
+                  <option key={genre.title} value={genre.title}>
+                    {genre.title}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -155,8 +162,14 @@ const Index: FC<Props> = (props: Props) => {
                   setFormData({ ...formData, author: e.target.value })
                 }
               >
-                <option value="a1">Choose...</option>
-                <option value="a2">...</option>
+                <option value="" disabled>
+                  Choose...
+                </option>
+                <option value="Chris Brown">Chris Brown</option>
+                <option value="Adam Levine">Adam Levine</option>
+                <option value="Dua Lipa">Dua Lipa</option>
+                <option value="Cheb Mami">Cheb Mami</option>
+                <option value="Cheb Kaled">Cheb Khaled</option>
               </select>
             </div>
             {/* add auther */}

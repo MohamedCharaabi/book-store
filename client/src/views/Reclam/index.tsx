@@ -35,8 +35,15 @@ const Modal: FC = () => {
   return (
     <div className="h-screen">
       <Header fixed={true} />
-      <div className="flex  md:justify-center md:items-center px-7 h-full">
-        <form className="w-full max-w-lg " onSubmit={handleSubmit}>
+
+      <div className="flex flex-col  md:justify-center items-center mt-8  px-7 h-full">
+        <h1 className="font-fell text-6xl uppercase">Contact </h1>
+        <hr className="h-3 w-full" />
+        <p className="font-fell text-xl mt-4">
+          For all your enquires, please email using the form below.
+        </p>
+
+        <form className="w-full max-w-lg mt-3" onSubmit={handleSubmit}>
           <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label
