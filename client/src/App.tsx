@@ -8,19 +8,26 @@ import Reclam from "./views/Reclam";
 import Auth from "./views/Auth";
 import BooksManag from "./views/Books-manag";
 import ContactsManag from "./views/Contacts-manag";
+import { AuthProvider } from "react-auth-kit";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/home" component={Home} />
-        <Route path="/details" component={Details} />
-        <Route path="/reclam" component={Reclam} />
-        <Route path="/login" component={Auth} />
-        <Route path="/books" component={BooksManag} />
-        <Route path="/contacts" component={ContactsManag} />
-      </Switch>
-    </BrowserRouter>
+    <AuthProvider
+      authType={"cookie"}
+      authName={"token"}
+      cookieDomain={window.location.hostname}
+    >
+      <BrowserRouter>
+        <Switch>
+          <Route path="/home" component={Home} />
+          <Route path="/details" component={Details} />
+          <Route path="/reclam" component={Reclam} />
+          <Route path="/login" component={Auth} />
+          <Route path="/books" component={BooksManag} />
+          <Route path="/contacts" component={ContactsManag} />
+        </Switch>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

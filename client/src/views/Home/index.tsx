@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { useIsAuthenticated } from "react-auth-kit";
 import { getBooks } from "../../api/books";
 import Header from "../../componnents/header";
 import Random from "../../componnents/random";
@@ -40,7 +41,6 @@ const Home: FC = (props: Props) => {
 
   useEffect(() => {
     getBooks().then((res) => {
-      console.log("res", res);
       setPopularBooks(res);
       setIsLoading(false);
     });

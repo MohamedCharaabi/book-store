@@ -8,6 +8,7 @@ import {
   Twitter,
 } from "react-feather";
 import Header from "../../componnents/header";
+import { Book } from "../../types";
 
 interface Social {
   icon: Icon;
@@ -54,7 +55,7 @@ const SocialButton = (props: Social) => {
 
 interface Props {}
 
-const Details: FC = (props: Props) => {
+const Details: FC<Book> = (props: Book) => {
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (
@@ -135,7 +136,9 @@ const Details: FC = (props: Props) => {
           </div>
           {/* Tab content */}
           <div className="flex flex-col justify-center gap-2 w-full">
-            <h5>{selectedTab === 0 ? "Description" : "Reviews"}</h5>
+            <div className="w-full h-56 grid place-content-center">
+              <h5>{selectedTab === 0 ? "Description" : "Reviews"}</h5>
+            </div>
           </div>
         </div>
 

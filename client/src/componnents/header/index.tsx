@@ -1,13 +1,21 @@
 import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
+import { useAuthUser, useIsAuthenticated, useSignOut } from "react-auth-kit";
+import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
 import { Book } from "../../types";
+import { useHistory } from "react-router-dom";
 
 interface Props {
   fixed: boolean;
 }
 
 const Index: FC<Props> = (props: Props) => {
+  const isAuthenticated = useIsAuthenticated();
+  const authUser = useAuthUser();
+  const signOut = useSignOut();
+  const history = useHistory();
+
   const [show, setShow] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [bookSeggestions, setBookSeggestions] = useState<Book[]>([]);
@@ -70,6 +78,8 @@ const Index: FC<Props> = (props: Props) => {
       </u>
     );
   };
+
+  console.log("authUser", authUser());
 
   return (
     <div
@@ -159,18 +169,38 @@ const Index: FC<Props> = (props: Props) => {
 
             {/* <!-- Secondary Navbar items --> */}
             <div className="hidden md:flex items-center space-x-3 ">
-              <a
-                href=""
-                className="py-2 px-1 lg:px-2  text-sm lg:text-base font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300"
-              >
-                Log In
-              </a>
-              <a
-                href=""
-                className="py-2 px-1 lg:px-2  text-sm lg:text-base font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
-              >
-                Sign Up
-              </a>
+              {isAuthenticated() ? (
+                <>
+                  <Link to="/profile">
+                    <a className="py-4 px-2 text-gray-500 font-semibold text-sm lg:text-base hover:text-blue-500 transition duration-300">
+                      {authUser()?.name ?? "User"}
+                    </a>
+                  </Link>
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+                    onClick={() => {
+                      signOut();
+                      history.push("/login");
+                    }}
+                  >
+                    <LogOut />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <a className="py-2 px-1 lg:px-2  text-sm lg:text-base font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300">
+                      Log In
+                    </a>
+                  </Link>
+                  <a
+                    href=""
+                    className="py-2 px-1 lg:px-2  text-sm lg:text-base font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
+                  >
+                    Sign Up
+                  </a>
+                </>
+              )}
             </div>
             {/* Mobile menu button  */}
             <div className="md:hidden flex items-center">
@@ -197,39 +227,37 @@ const Index: FC<Props> = (props: Props) => {
         {/* mobile menu */}
         <div className={`${!showMenu && "hidden"} lg:hidden mobile-menu`}>
           <ul className="">
-            <li className="active">
-              <a
-                href="index.html"
-                className="block text-sm px-2 py-4 text-white bg-blue-500 font-semibold"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="#services"
-                className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
-              >
-                Services
-              </a>
-            </li>
-            <li>
-              <a
-                href="#about"
-                className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
-              >
-                About
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#contact"
-                className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
-              >
-                Contact Us
-              </a>
-            </li>
+            <Link to="/home">
+              <li className="active">
+                <a
+                  href="index.html"
+                  className="block text-sm px-2 py-4 text-white bg-blue-500 font-semibold"
+                >
+                  Home
+                </a>
+              </li>
+            </Link>
+            <Link to="/home">
+              <li>
+                <a className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300">
+                  Services
+                </a>
+              </li>
+            </Link>
+            <Link to="/home">
+              <li>
+                <a className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300">
+                  About
+                </a>
+              </li>
+            </Link>
+            <Link to="/reclam ">
+              <li>
+                <a className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300">
+                  Contact Us
+                </a>
+              </li>
+            </Link>
           </ul>
         </div>
       </nav>
