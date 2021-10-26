@@ -5,6 +5,7 @@ import { LogOut } from "react-feather";
 import { Link } from "react-router-dom";
 import { Book } from "../../types";
 import { useHistory } from "react-router-dom";
+import { useScrollPosition } from "../../hooks/useScrollPosition";
 
 interface Props {
   fixed: boolean;
@@ -19,6 +20,14 @@ const Index: FC<Props> = (props: Props) => {
   const [show, setShow] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [bookSeggestions, setBookSeggestions] = useState<Book[]>([]);
+  // const [sticky, setSticky] = useState(false)
+  // useScrollPosition(
+  //   ({ prevPos, currPos }) => {
+  //     const isShow = currPos.y > prevPos.y
+  //     if (isShow !== sticky) setSticky(isShow)
+  //   },
+  //   [sticky]
+  // )
 
   useEffect(() => {
     window.addEventListener("scroll", () => {

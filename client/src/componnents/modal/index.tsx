@@ -17,6 +17,7 @@ interface Props {
 const Index: FC<Props> = (props: Props) => {
   const [processing, setProcessing] = useState(false);
   const [coverImage, setCoverImage] = useState<string>();
+  const [pdfFile, setPdfFile] = useState<string>();
   const [formData, setFormData] = useState({
     title: "",
     genre: "",
@@ -24,38 +25,48 @@ const Index: FC<Props> = (props: Props) => {
     description: "",
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const reader = new FileReader(),
-      files = e.target.files;
-    reader.onload = function () {
-      typeof reader.result === "string" && setCoverImage(reader.result);
-      console.log(typeof reader.result);
-      // setCoverImage(reader.result);
+  const handleFileChange =
+    (imageFile: Boolean) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      e.preventDefault();
+      const reader = new FileReader(),
+        files = e.target.files;
+      reader.onload = function () {
+        typeof reader.result === "string" &&
+          (imageFile
+            ? setCoverImage(reader.result)
+            : setPdfFile(reader.result));
+        console.log(typeof reader.result);
+      };
+      reader.readAsDataURL(files![0]);
     };
-    reader.readAsDataURL(files![0]);
-  };
 
-  const uploadImage = async () => {
+  const uploadFiles = async () => {
     setProcessing(true);
     const data = new FormData();
     data.append("file", coverImage as string);
     data.append("upload_preset", "default");
     data.append("cloud_name", "isetz");
 
-    console.log(coverImage);
-    // console.log(formData)
+    const pdfdata = new FormData();
+    pdfdata.append("file", pdfFile as string);
+    pdfdata.append("upload_preset", "default");
+    pdfdata.append("cloud_name", "isetz");
 
-    fetch("  https://api.cloudinary.com/v1_1/isetz/image/upload", {
+    // console.log(coverImage);
+    // // console.log(formData)
+
+    fetch("https://api.cloudinary.com/v1_1/isetz/image/upload", {
       method: "post",
       body: data,
     })
       .then((resp) => resp.json())
+
       .then(async (data) => {
         await axios
           .post(`http://localhost:5000/api/books`, {
             ...formData,
             cover_url: data.url,
+            pdf: pdfFile,
           })
           .then((res) => {
             console.log(res);
@@ -78,7 +89,7 @@ const Index: FC<Props> = (props: Props) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    uploadImage();
+    uploadFiles();
   };
 
   return (
@@ -211,7 +222,23 @@ const Index: FC<Props> = (props: Props) => {
                 className="form-textarea mt-1 block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 type="file"
                 accept="image/*"
-                onChange={handleFileChange}
+                onChange={handleFileChange(true)}
+              />
+            </div>
+            <div className="w-full  px-3 mb-6 md:mb-0">
+              <label
+                className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                htmlFor="grid-cover"
+              >
+                PDF File
+              </label>
+
+              <input
+                id="grid-cover"
+                className="form-textarea mt-1 block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                type="file"
+                accept="pdf/*"
+                onChange={handleFileChange(false)}
               />
             </div>
           </div>
@@ -253,3 +280,8 @@ const Index: FC<Props> = (props: Props) => {
 };
 
 export default Index;
+function imageFile(
+  imageFile: any
+): React.ChangeEventHandler<HTMLInputElement> | undefined {
+  throw new Error("Function not implemented.");
+}

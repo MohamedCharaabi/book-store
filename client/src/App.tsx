@@ -8,7 +8,9 @@ import Reclam from "./views/Reclam";
 import Auth from "./views/Auth";
 import BooksManag from "./views/Books-manag";
 import ContactsManag from "./views/Contacts-manag";
-import { AuthProvider } from "react-auth-kit";
+import { AuthProvider, useAuthUser, useIsAuthenticated } from "react-auth-kit";
+import { Provider } from "react-redux";
+import store from "./state/store";
 
 function App() {
   return (
@@ -17,16 +19,19 @@ function App() {
       authName={"token"}
       cookieDomain={window.location.hostname}
     >
-      <BrowserRouter>
-        <Switch>
-          <Route path="/home" component={Home} />
-          <Route path="/details" component={Details} />
-          <Route path="/reclam" component={Reclam} />
-          <Route path="/login" component={Auth} />
-          <Route path="/books" component={BooksManag} />
-          <Route path="/contacts" component={ContactsManag} />
-        </Switch>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/details" component={Details} />
+            <Route path="/reclam" component={Reclam} />
+            <Route path="/login" component={Auth} />
+
+            <Route path="/books" component={BooksManag} />
+            <Route path="/contacts" component={ContactsManag} />
+            <Route path="/" component={Home} />
+          </Switch>
+        </BrowserRouter>
+      </Provider>
     </AuthProvider>
   );
 }

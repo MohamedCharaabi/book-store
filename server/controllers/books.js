@@ -1,8 +1,17 @@
 "use strict";
-
+import cloudinary from "cloudinary";
 import express from "express";
+import dotEnv from "dotenv";
+dotEnv.config();
+
 const router = express.Router();
 import { con } from "../config/database.js";
+
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 export const getBooks = async (req, res) => {
   await con
@@ -42,15 +51,31 @@ export const getBook = async (req, res) => {
 };
 
 export const addBook = async (req, res) => {
-  const { title, author, genre, description, cover_url } = req.body;
-  const newBook = { title, author, genre, description, cover_url };
-  await con
-    .insert(newBook)
-    .into("books")
-    .then(() => {
-      res.json("Book added");
+  const { title, author, genre, description, cover_url, pdf } = req.body;
+
+  const newBook = { title, author, genre, description, cover_url, pdf: "" };
+
+  console.log(pdf);
+
+  cloudinary.v2.uploader
+    .upload(pdf, {
+      resource_type: "pdf",
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .then(async (result) => {
+      console.log(result);
+      newBook.pdf = result.url;
+
+      await con
+        .insert(newBook)
+        .into("books")
+        .then(() => {
+          res.json("Book added");
+        })
+        .catch((err) => res.status(400).json("Error: " + err));
+    })
+    .catch((err) => {
+      return res.status(400).json("Error: " + err);
+    });
 };
 
 export const updateBook = async (req, res) => {
