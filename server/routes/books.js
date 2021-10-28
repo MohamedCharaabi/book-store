@@ -9,15 +9,16 @@ import {
   getBooksWithLimits,
 } from "../controllers/books.js";
 import { checkBooksTable } from "../middlewers/book.js";
+import { verifyToken } from "../middlewers/users.js";
 
 const router = express.Router();
 
 router.get("/", checkBooksTable, getBooks);
-router.get("/bb", checkBooksTable, getBooksWithLimits);
+router.get("/bb", verifyToken, checkBooksTable, getBooksWithLimits);
 router.get("/:id", checkBooksTable, getBook);
-router.post("/", checkBooksTable, addBook);
-router.patch("/:id", checkBooksTable, updateBook);
-router.delete("/:id", checkBooksTable, deleteBook);
+router.post("/", verifyToken, checkBooksTable, addBook);
+router.patch("/:id", verifyToken, checkBooksTable, updateBook);
+router.delete("/:id", verifyToken, checkBooksTable, deleteBook);
 router.get("/search/:term", checkBooksTable, searchBook);
 
 export default router;

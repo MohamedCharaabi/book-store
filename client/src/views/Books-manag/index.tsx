@@ -1,5 +1,12 @@
 import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
+import {
+  useAuthHeader,
+  useAuthUser,
+  useIsAuthenticated,
+  withSignIn,
+} from "react-auth-kit";
+import { Redirect } from "react-router";
 import Header from "../../componnents/header";
 import Modal from "../../componnents/modal";
 import { Book } from "../../types";
@@ -15,6 +22,10 @@ enum Pagination {
 }
 
 const BookManag: FC = (props: Props) => {
+  const isAuthenticated = useIsAuthenticated();
+  const userData = useAuthUser();
+  const authHeader = useAuthHeader();
+
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
@@ -24,7 +35,12 @@ const BookManag: FC = (props: Props) => {
   const getBooks = async () => {
     try {
       const response = await axios.get<Book[]>(
-        `http://localhost:5000/api/books/bb?page=${page}`
+        `http://localhost:5000/api/books/bb?page=${page}`,
+        {
+          headers: {
+            Authorization: authHeader().substring(7),
+          },
+        }
       );
       response.data.length > 0 && setBooks(response.data);
       response.data.length < 5
@@ -50,12 +66,21 @@ const BookManag: FC = (props: Props) => {
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:5000/api/books/${id}`);
+      await axios.delete(`http://localhost:5000/api/books/${id}`, {
+        headers: {
+          authorization: userData()?.token,
+        },
+      });
       setBooks(books.filter((book) => book.id !== id));
     } catch (error) {
       console.log(error);
     }
   };
+
+  if (!isAuthenticated || userData()?.role !== "a") {
+    return <Redirect to="/" />;
+  }
+
   if (isLoading) {
     return (
       <div className="h-screen w-screen grid place-content-center">

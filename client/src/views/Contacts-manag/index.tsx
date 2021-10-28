@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { FC, useEffect, useState } from "react";
+import { useAuthHeader, useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import { Delete, Eye, Trash, Trash2 } from "react-feather";
+import { Redirect } from "react-router";
 import Header from "../../componnents/header";
 import Modal from "../../componnents/modal";
 
@@ -23,6 +25,10 @@ interface Reclam {
 }
 
 const ReclamManag: FC = (props: Props) => {
+  const isAuthenticated = useIsAuthenticated();
+  const userData = useAuthUser();
+  const authHeader = useAuthHeader();
+
   const [reclams, setReclams] = useState<Reclam[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(0);
@@ -31,7 +37,12 @@ const ReclamManag: FC = (props: Props) => {
   const getReclams = async () => {
     try {
       const response = await axios.get<Reclam[]>(
-        `http://localhost:5000/api/contacts/cc?page=${page}`
+        `http://localhost:5000/api/contacts/cc?page=${page}`,
+        {
+          headers: {
+            authorization: authHeader().substring(7),
+          },
+        }
       );
       response.data.length > 0 && setReclams(response.data);
       response.data.length < 5
@@ -50,7 +61,11 @@ const ReclamManag: FC = (props: Props) => {
 
   const handleDelete = async (id: number) => {
     try {
-      await axios.delete(`http://localhost:5000/api/contacts/${id}`);
+      await axios.delete(`http://localhost:5000/api/contacts/${id}`, {
+        headers: {
+          authorization: userData()?.token,
+        },
+      });
       setReclams(reclams.filter((reclam) => reclam.id !== id));
     } catch (error) {
       console.log(error);
@@ -62,6 +77,10 @@ const ReclamManag: FC = (props: Props) => {
         <div className=" animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
       </div>
     );
+  }
+
+  if (!isAuthenticated || userData()?.role !== "a") {
+    return <Redirect to="/" />;
   }
 
   return (

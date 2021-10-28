@@ -19,7 +19,10 @@ export const checkUsersTable = async (req, res, next) => {
 };
 
 export const verifyToken = (req, res, next) => {
-  const token = req.headers["x-access-token"] || req.body.token;
+  console.log(req.headers);
+  const token = req.headers["authorization"] || req.headers["x-access-token"];
+
+  console.log(token);
   if (!token) {
     return res.status(403).send("A token is required for authentication");
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 
 import Home from "./views/Home";
@@ -22,13 +22,14 @@ function App() {
       <Provider store={store}>
         <BrowserRouter>
           <Switch>
-            <Route path="/details" component={Details} />
+            <Route path="/details/:id" component={Details} />
             <Route path="/reclam" component={Reclam} />
             <Route path="/login" component={Auth} />
 
             <Route path="/books" component={BooksManag} />
             <Route path="/contacts" component={ContactsManag} />
-            <Route path="/" component={Home} />
+            <Route path="/" exact component={Home} />
+            <Redirect to="/" />
           </Switch>
         </BrowserRouter>
       </Provider>

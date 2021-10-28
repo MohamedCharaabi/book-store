@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Facebook,
   Feather,
@@ -7,6 +7,9 @@ import {
   Mail,
   Twitter,
 } from "react-feather";
+import { useQuery } from "react-query";
+import { useParams } from "react-router";
+import { getBook } from "../../api/books";
 import Header from "../../componnents/header";
 import { Book } from "../../types";
 
@@ -55,8 +58,22 @@ const SocialButton = (props: Social) => {
 
 interface Props {}
 
+type Params = {
+  id: string;
+};
+
 const Details: FC<Book> = (props: Book) => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const { id } = useParams<Params>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [book, setBook] = useState<Book>();
+
+  useEffect(() => {
+    getBook(id).then((data) => {
+      setBook(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const handleTabChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -66,8 +83,18 @@ const Details: FC<Book> = (props: Book) => {
     setSelectedTab(tab);
   };
 
+  if (isLoading) {
+    return (
+      <div className="h-screen w-screen grid place-content-center">
+        <div className=" animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
+
+  console.log(book);
+
   return (
-    <div>
+    <div className="p-2">
       <Header fixed={false} />
 
       <div className="flex h-full">
@@ -77,11 +104,11 @@ const Details: FC<Book> = (props: Book) => {
             <img
               className="sm:h-2/5 w-2/5 rounded-lg"
               alt="author"
-              src="https://skybook-16ed9.kxcdn.com/demo-03/wp-content/uploads/2018/05/product-18-1.jpg"
+              src={book?.cover_url}
             />
             <div className="flex flex-col justify-start  w-3/4    ml-4">
               <h1 className="text-5xl font-fell uppercase mb-2">
-                A Bigger Prize
+                {book?.title}
               </h1>
               <p>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed

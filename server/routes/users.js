@@ -13,7 +13,7 @@ import { checkUsersTable, verifyToken } from "../middlewers/users.js";
 
 const router = express.Router();
 
-router.get("/", verifyToken, getUsers);
+router.get("/", getUsers);
 router.get("/limit/", checkUsersTable, getUsersWithLimits);
 router.get("/:id", checkUsersTable, getUser);
 router.post("/register", checkUsersTable, registerUser);

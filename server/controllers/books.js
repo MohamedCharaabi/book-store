@@ -17,8 +17,9 @@ export const getBooks = async (req, res) => {
   await con
     .select("*")
     .from("books")
+    .orderBy("id")
     .then((books) => {
-      res.json(books);
+      res.json(books.reverse());
     })
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -30,6 +31,7 @@ export const getBooksWithLimits = async (req, res) => {
   await con
     .select("*")
     .from("books")
+    .orderBy("id", "desc")
     .limit(5)
     .offset(start)
     .then((books) => {
@@ -45,7 +47,7 @@ export const getBook = async (req, res) => {
     .from("books")
     .where("id", id)
     .then((book) => {
-      res.json(book);
+      res.json(book[0]);
     })
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -55,18 +57,15 @@ export const addBook = async (req, res) => {
 
   const newBook = { title, author, genre, description, cover_url, pdf: "" };
 
-  console.log(pdf);
-
   cloudinary.v2.uploader
     .upload(pdf, {
-      resource_type: "pdf",
+      resource_type: "raw",
     })
     .then(async (result) => {
       console.log(result);
-      newBook.pdf = result.url;
 
       await con
-        .insert(newBook)
+        .insert({ ...newBook, pdf: result.url })
         .into("books")
         .then(() => {
           res.json("Book added");
@@ -74,7 +73,7 @@ export const addBook = async (req, res) => {
         .catch((err) => res.status(400).json("Error: " + err));
     })
     .catch((err) => {
-      return res.status(400).json("Error: " + err);
+      return res.status(400).json(err);
     });
 };
 

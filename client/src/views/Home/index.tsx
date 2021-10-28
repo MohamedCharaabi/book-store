@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { useIsAuthenticated } from "react-auth-kit";
+import { useAuthHeader, useIsAuthenticated } from "react-auth-kit";
+import { Link } from "react-feather";
 import { getBooks } from "../../api/books";
 import Header from "../../componnents/header";
 import Random from "../../componnents/random";
@@ -97,23 +98,28 @@ const Home: FC = (props: Props) => {
       <div className="flex overflow-x-scroll overflow-y-hidden  w-full gap-2 px-12 mt-2 scrollbar-hidden">
         {popularBooks.slice(0, 8).map((book: Book) => {
           return (
-            <div className="min-h-max w-40 flex-none  ">
-              <img
-                src={book.cover_url}
-                alt={book.title}
-                className="w-36 h-48"
-              />
-              <h3 className="  top-1/2 left-0  text-black ">{book.title}</h3>
-              <h3 className="  top-1/2 left-0 w-full text-gray-500 ">
-                {book.author}
-              </h3>
-              <h3 className="  top-1/2 left-0 w-full text-yellow-300 ">
-                ✻✻✻✻✻
-              </h3>
-              <button className=" border-blue-600 border-2 rounded-lg p-2 text-blue-500">
+            <a
+              href={`/details/${book.id}`}
+              className="min-h-max w-40 flex-none  "
+            >
+              <div className="min-h-max w-40 flex-none  ">
+                <img
+                  src={book.cover_url}
+                  alt={book.title}
+                  className="w-36 h-48"
+                />
+                <h3 className="  top-1/2 left-0  text-black ">{book.title}</h3>
+                <h3 className="  top-1/2 left-0 w-full text-gray-500 ">
+                  {book.author}
+                </h3>
+                <h3 className="  top-1/2 left-0 w-full text-yellow-300 ">
+                  ✻✻✻✻✻
+                </h3>
+                {/* <button className=" border-blue-600 border-2 rounded-lg p-2 text-blue-500">
                 {book.price ?? "$22.95"}
-              </button>
-            </div>
+              </button> */}
+              </div>
+            </a>
           );
         })}
       </div>

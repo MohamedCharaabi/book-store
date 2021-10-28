@@ -99,6 +99,8 @@ export const loginUser = async (req, res) => {
       const authUserState = {
         name: user[0].name,
         email: user[0].email,
+        role: user[0].role,
+        token,
       };
       return res.json({ authUserState, token: token });
     })
